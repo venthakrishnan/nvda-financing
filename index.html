@@ -1,0 +1,323 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Nvidia's own 10-Q splits its AI financing into ~$170B signed and $500B+ unsigned. The hypothesis, the bull and bear cases, who is exposed, and what the Nov 17 filing will show.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Only one of Nvidia's two money piles needs Jensen Huang">
+<meta property="og:description" content="~$170B signed vs $500B+ unsigned, from Nvidia's 10-Q. Who is exposed: $SFTBY $CRWV $NBIS $IREN. What Nov 17 will show.">
+<meta property="og:image" content="https://venthakrishnan.github.io/nvda-financing/nvda-two-piles.png">
+<meta property="og:url" content="https://venthakrishnan.github.io/nvda-financing/">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Only one of Nvidia's two money piles needs Jensen Huang">
+<meta name="twitter:description" content="~$170B signed vs $500B+ unsigned, from Nvidia's 10-Q. Who is exposed, bull vs bear, and what Nov 17 will show.">
+<meta name="twitter:image" content="https://venthakrishnan.github.io/nvda-financing/nvda-two-piles.png">
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font-size:14px}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>The Jensen Pile</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wdth,wght@75..100,400..700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+/* Layout: a single filing-reader column; the two piles are drawn to one dollar scale, solid ink = signed, dashed outline = not signed. */
+:root{
+  --bg:#F3F5F9; --panel:#FFFFFF; --fg:#0D1625; --muted:#5A6577; --rule:#D8DEE8;
+  --signed:#1D4ED8; --signed-soft:#DCE5FB; --open:#B4530A; --open-soft:#FBEBDD;
+  --grey:#8C96A8; --grey-soft:#E6EAF0; --up:#0F7A4A; --down:#B42318;
+  --display:"Instrument Sans","Helvetica Neue",Arial,sans-serif;
+  --body:"Instrument Sans","Helvetica Neue",Arial,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0A101B; --panel:#111a29; --fg:#E6EBF3; --muted:#9AA5B8; --rule:#253247;
+  --signed:#7FA0FF; --signed-soft:#1A2A52; --open:#F2A35A; --open-soft:#3A2614;
+  --grey:#6F7B90; --grey-soft:#1B2536; --up:#3FCB8A; --down:#FF7A6E; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0A101B; --panel:#111a29; --fg:#E6EBF3; --muted:#9AA5B8; --rule:#253247;
+  --signed:#7FA0FF; --signed-soft:#1A2A52; --open:#F2A35A; --open-soft:#3A2614;
+  --grey:#6F7B90; --grey-soft:#1B2536; --up:#3FCB8A; --down:#FF7A6E; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:16px;line-height:1.55;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:40px 64px}
+.wrap{max-width:980px;margin:0 auto;display:grid;gap:56px}
+.prose{max-width:66ch}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;margin:0;letter-spacing:-.01em}
+h1{font-size:clamp(2.1rem,5.6vw,3.7rem);line-height:1.02;font-weight:650;font-stretch:88%}
+h2{font-size:clamp(1.4rem,3vw,1.9rem);line-height:1.15;font-weight:620;font-stretch:92%}
+h3{font-size:1.05rem;font-weight:620}
+p{margin:0}
+.eyebrow{font-family:var(--mono);font-size:.74rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.lede{font-size:1.18rem;color:var(--fg);max-width:60ch}
+.stack{display:grid;gap:14px}
+.mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
+a{color:var(--signed);text-underline-offset:2px}
+a:focus-visible,button:focus-visible{outline:2px solid var(--signed);outline-offset:2px}
+.sig{color:var(--signed);font-weight:600}.opn{color:var(--open);font-weight:600}
+hr{border:0;border-top:1px solid var(--rule);margin:0}
+
+/* hero numbers */
+.duel{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:8px}
+.pile{padding:20px 20px 18px;border-radius:6px;display:grid;gap:6px;min-width:0}
+.pile.s{background:var(--signed-soft);border:2px solid var(--signed)}
+.pile.o{background:transparent;border:2px dashed var(--open)}
+.pile .big{font-family:var(--mono);font-size:clamp(2rem,6vw,3.2rem);font-weight:600;line-height:1}
+.pile.s .big{color:var(--signed)}.pile.o .big{color:var(--open)}
+.pile .tag{font-family:var(--mono);font-size:.72rem;letter-spacing:.08em;text-transform:uppercase}
+.pile small{color:var(--muted);font-size:.9rem}
+@media (max-width:560px){.duel{grid-template-columns:1fr}}
+
+/* scale chart */
+.fig{background:var(--panel);border:1px solid var(--rule);border-radius:6px;padding:20px;display:grid;gap:14px}
+.scroll{overflow-x:auto}
+.fig svg{display:block;width:100%;min-width:640px;height:auto}
+.fig svg text{fill:var(--fg);font-family:var(--mono);font-size:12px}
+.fig svg .m{fill:var(--muted)}
+.legend{display:flex;flex-wrap:wrap;gap:8px 20px;font-size:.85rem;color:var(--muted)}
+.sw{display:inline-block;width:14px;height:10px;border-radius:2px;margin-right:6px;vertical-align:-1px}
+.cap{font-size:.85rem;color:var(--muted)}
+
+/* timeline */
+.tl{display:grid;gap:0;border-left:2px solid var(--rule);margin-left:6px}
+.ev{display:grid;grid-template-columns:118px 1fr;gap:16px;padding:12px 0 12px 18px;position:relative}
+.ev::before{content:"";position:absolute;left:-7px;top:19px;width:12px;height:12px;border-radius:50%;background:var(--bg);border:2px solid var(--grey)}
+.ev.s::before{background:var(--signed);border-color:var(--signed)}
+.ev.o::before{border-color:var(--open);border-style:dashed}
+.ev.x::before{background:var(--down);border-color:var(--down)}
+.ev .d{font-family:var(--mono);font-size:.82rem;color:var(--muted);padding-top:2px}
+.ev p{max-width:62ch}
+@media (max-width:560px){.ev{grid-template-columns:1fr;gap:2px}}
+
+/* exposure table */
+.tbl{width:100%;border-collapse:collapse;min-width:720px;font-size:.92rem}
+.tbl th{font-family:var(--mono);font-size:.7rem;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);text-align:left;font-weight:500;padding:8px 10px;border-bottom:1px solid var(--rule)}
+.tbl td{padding:12px 10px;border-bottom:1px solid var(--rule);vertical-align:top}
+.tbl td:nth-child(4){white-space:nowrap}
+.pill{display:inline-block;font-family:var(--mono);font-size:.7rem;letter-spacing:.05em;text-transform:uppercase;padding:2px 8px;border-radius:999px;white-space:nowrap}
+.p-hi{background:var(--open-soft);color:var(--open);border:1px dashed var(--open)}
+.p-md{background:var(--grey-soft);color:var(--fg);border:1px dashed var(--grey)}
+.p-lo{background:var(--signed-soft);color:var(--signed);border:1px solid var(--signed)}
+.tick{font-family:var(--mono);font-weight:600}
+
+/* move bars */
+.moves{display:grid;gap:6px}
+.mv{display:grid;grid-template-columns:64px 1fr 60px;align-items:center;gap:10px;font-size:.85rem}
+.mv .t{font-family:var(--mono);font-weight:600}
+.mv .v{font-family:var(--mono);text-align:right;font-variant-numeric:tabular-nums}
+.track{position:relative;height:16px;background:linear-gradient(var(--rule),var(--rule)) center/1px 100% no-repeat}
+.bar{position:absolute;top:2px;height:12px;border-radius:2px}
+.grp{font-family:var(--mono);font-size:.7rem;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);margin-top:10px}
+
+.two{display:grid;grid-template-columns:1fr 1fr;gap:28px}
+@media (max-width:760px){.two{grid-template-columns:1fr}}
+.card{border-top:2px solid var(--fg);padding-top:14px;display:grid;gap:10px;min-width:0}
+ol.watch{margin:0;padding-left:1.2em;display:grid;gap:10px}
+ol.watch li::marker{font-family:var(--mono);color:var(--muted)}
+.quote{font-family:var(--mono);font-size:.86rem;background:var(--panel);border:1px solid var(--rule);border-left:3px solid var(--open);padding:12px 14px;border-radius:4px}
+.src{font-size:.84rem;color:var(--muted);display:grid;gap:6px}
+.src li{margin:0}
+.src ol{margin:0;padding-left:1.3em;display:grid;gap:5px}
+footer{font-size:.8rem;color:var(--muted)}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+<header class="stack">
+  <p class="eyebrow">Read from Nvidia's Form 10-Q, filed Aug 26, 2026 &middot; market data through Nov 11, 2026 close</p>
+  <h1>Only one of Nvidia's two money piles needs Jensen Huang.</h1>
+  <p class="lede">Everyone is asking whether Huang keeps the job. Nvidia's own filing points to a better question. Its AI financing comes in two kinds. One kind is signed and binds the company no matter who runs it. The other kind is memoranda of understanding and options that Nvidia exercises "in our sole discretion." The second pile is about 3.5 times the first, and it is the part that depends on who sits in the CEO chair.</p>
+  <div class="duel">
+    <div class="pile s">
+      <span class="tag">Signed &middot; binds the company</span>
+      <span class="big">$170B</span>
+      <small>Lease guarantees, AI-cloud capacity commitments and equity commitments in Note 10 of the 10-Q. A new CEO inherits all of it.</small>
+    </div>
+    <div class="pile o">
+      <span class="tag">Not signed &middot; at Nvidia's option</span>
+      <span class="big">$590B+</span>
+      <small>$500B+ of non-binding financing MOUs, plus an option on about 3.8 GW more of OpenAI's Ohio campus. Someone has to choose to sign each one.</small>
+    </div>
+  </div>
+</header>
+
+<section class="stack">
+  <p class="eyebrow">The hypothesis</p>
+  <h2>Nvidia's signed deals are safe. The unsigned ones shrink whether or not Huang stays, because a board that is investigating him will approve fewer open-ended guarantees.</h2>
+  <p class="prose">This can be checked on a date. Nvidia files its next 10-Q after its Nov 17, 2026 results, the first filing written under board investigation. Note 10 shows whether the unsigned pile turned into signed obligations or stalled.</p>
+  <div class="two">
+    <div class="card" style="border-top-color:var(--up)">
+      <h3>Bull case: the pile is converting</h3>
+      <p>Guarantees rise above $108.5B, an MOU becomes a definitive agreement, or the 3.8 GW option is exercised. The governance scare had no effect on deal-making.</p>
+      <p class="cap">Helps: <span class="tick">$SFTBY $CRWV $NBIS $IREN</span>. Hypothesis wrong.</p>
+    </div>
+    <div class="card" style="border-top-color:var(--down)">
+      <h3>Bear case: the pile is frozen</h3>
+      <p>Guarantees stay at $108.5B, the "may not lead to definitive agreements" line is unchanged with no first project named, or new board approval language appears for investments.</p>
+      <p class="cap">Hurts: <span class="tick">$SFTBY $CRWV $NBIS $IREN</span>. Mostly safe: <span class="tick">$INTC $COHR $NOK $SNPS</span>, TSMC. Hypothesis right.</p>
+    </div>
+  </div>
+</section>
+
+<section class="stack">
+  <h2>Both piles, drawn to one dollar scale</h2>
+  <div class="fig">
+    <div class="scroll">
+    <svg viewBox="0 0 1000 300" role="img" aria-label="Bar chart: signed financing of 169.5 billion dollars versus at least 592 billion dollars not signed, with 99 billion of equity already invested and 279 billion of supply commitments for context.">
+      <!-- scale: 1.25 px per $1B, x0 = 150 -->
+      <g>
+        <text x="0" y="40">SIGNED</text>
+        <text class="m" x="0" y="56">survives any CEO</text>
+        <rect x="150" y="22" width="131.25" height="40" fill="var(--signed)"/>
+        <rect x="281.25" y="22" width="45" height="40" fill="var(--signed)" opacity=".72"/>
+        <rect x="326.25" y="22" width="31.25" height="40" fill="var(--signed)" opacity=".5"/>
+        <rect x="357.5" y="22" width="4.4" height="40" fill="var(--signed)" opacity=".35"/>
+        <text x="370" y="47">$169.5B</text>
+        <text class="m" x="152" y="80">$105B OpenAI lease guarantee</text>
+        <text class="m" x="152" y="96">$36B AI-cloud capacity &middot; $25B equity &middot; $3.5B other</text>
+      </g>
+      <g>
+        <text x="0" y="140">NOT SIGNED</text>
+        <text class="m" x="0" y="156">needs a decision</text>
+        <rect x="150" y="122" width="625" height="40" fill="var(--open-soft)" stroke="var(--open)" stroke-width="2" stroke-dasharray="7 5"/>
+        <rect x="775" y="122" width="115.75" height="40" fill="none" stroke="var(--open)" stroke-width="2" stroke-dasharray="3 5"/>
+        <text x="160" y="147">$500B+ financing MOUs (6 firms)</text>
+        <text x="781" y="147">~$93B est.</text>
+        <text class="m" x="152" y="180">"may not lead to definitive agreements"</text>
+        <text class="m" x="779" y="180">3.8 GW option</text>
+      </g>
+      <g>
+        <text x="0" y="232">CONTEXT</text>
+        <text class="m" x="0" y="248">already done</text>
+        <rect x="150" y="218" width="123.75" height="22" fill="var(--grey-soft)" stroke="var(--grey)"/>
+        <rect x="273.75" y="218" width="348.75" height="22" fill="var(--grey-soft)" stroke="var(--grey)"/>
+        <text class="m" x="156" y="233">$99B invested</text>
+        <text class="m" x="282" y="233">$279B supply commitments (TSMC, memory)</text>
+      </g>
+      <line x1="150" y1="276" x2="1000" y2="276" stroke="var(--rule)"/>
+      <g class="m">
+        <text class="m" x="146" y="294">$0</text>
+        <text class="m" x="390" y="294">$200B</text>
+        <text class="m" x="640" y="294">$400B</text>
+        <text class="m" x="890" y="294">$600B</text>
+      </g>
+      <line x1="150" y1="272" x2="150" y2="280" stroke="var(--grey)"/>
+      <line x1="400" y1="272" x2="400" y2="280" stroke="var(--grey)"/>
+      <line x1="650" y1="272" x2="650" y2="280" stroke="var(--grey)"/>
+      <line x1="900" y1="272" x2="900" y2="280" stroke="var(--grey)"/>
+    </svg>
+    </div>
+    <div class="legend">
+      <span><i class="sw" style="background:var(--signed)"></i>Signed obligation (10-Q Note 10)</span>
+      <span><i class="sw" style="border:2px dashed var(--open)"></i>Non-binding or at Nvidia's option</span>
+      <span><i class="sw" style="background:var(--grey-soft);border:1px solid var(--grey)"></i>Already invested or contracted with suppliers</span>
+    </div>
+    <p class="cap">The $93B is our estimate, not a filed number: the $105B cap covers 4.25 GW, so the same terms on the 3.8 GW option would be about $93B. The filing also lets Nvidia add "limited residual-value support" to MOU projects "at our option"; that amount is not disclosed and is not drawn. The $36B AI-cloud figure is from the 10-Q's description of the new cloud-partner model; the filing's commitments table separately lists $29B of cloud service agreements for Nvidia's own R&amp;D, not counted here.</p>
+  </div>
+</section>
+
+<section class="stack">
+  <h2>The unsigned pile has already shrunk once, under Huang</h2>
+  <p class="prose">This is the evidence that the discretionary layer moves. Between late July and mid-August 2026 the OpenAI guarantee under discussion went from about $250B to a signed $105B. Huang was fully in charge, and the cut still happened after Nvidia's credit default swaps hit a record.</p>
+  <div class="tl">
+    <div class="ev o"><span class="d">Sep 2025</span><p>Letter of intent: Nvidia to invest "up to $100B" in OpenAI. In December the CFO said "we still haven't completed a definitive agreement."</p></div>
+    <div class="ev o"><span class="d">Jul 28, 2026</span><p>Reports of talks to guarantee up to <b>$250B</b> of OpenAI's Ohio lease and finance <b>$350B</b> of chip purchases. Nvidia 5-year CDS hit a record 82 bp, and the stock fell about 5%.</p></div>
+    <div class="ev o"><span class="d">Aug 10, 2026</span><p>Non-binding MOUs with Apollo, BlackRock, Blackstone, Brookfield, Goldman Sachs and KKR to "mobilize more than $500B" of third-party capital.</p></div>
+    <div class="ev o"><span class="d">Aug 14, 2026</span><p>WSJ reports the OpenAI guarantee was cut to under $120B and limited to the first part of the campus.</p></div>
+    <div class="ev s"><span class="d">Aug 17, 2026</span><p><b>Signed:</b> guarantees capped at $105B for 4.25 GW at SB Energy's PORTS campus in Pike County, Ohio, with 20-year leases to OpenAI, plus $1.5B invested in SB Energy. The remaining ~3.8 GW stays an option.</p></div>
+    <div class="ev x"><span class="d">Nov 8, 2026</span><p>Huang admits an affair in a message to staff. Independent directors open an investigation with outside counsel. The board says it has "no reason to believe" national security or Nvidia secrets were compromised.</p></div>
+    <div class="ev x"><span class="d">Nov 11, 2026</span><p>WSJ reports the board is meeting to decide whether to replace him. Nvidia has named no successor. Fortune's read is that the board may keep him with less authority.</p></div>
+    <div class="ev"><span class="d">Nov 17, 2026</span><p>Q3 FY27 results after the close, followed by the 10-Q. This is the first filing written under board investigation. Note 10 will show whether the unsigned pile moved.</p></div>
+  </div>
+</section>
+
+<section class="stack">
+  <h2>Who leans on which pile</h2>
+  <p class="prose">Exposure means dependence on the <span class="opn">unsigned</span> pile: money or support Nvidia has not yet committed in writing. The <span class="sig">signed</span> pile is safe in every scenario for the companies below.</p>
+  <div class="fig">
+    <div class="scroll">
+    <table class="tbl">
+      <thead><tr><th>Who</th><th>Tied to Nvidia by</th><th>What is not signed</th><th>Exposure</th></tr></thead>
+      <tbody>
+        <tr><td><span class="tick">OpenAI</span><br><span class="cap">private; public proxies SFTBY, ORCL</span></td><td>$105B lease guarantee (signed) and exclusive Nvidia campus</td><td>The ~3.8 GW second half of Ohio, "exercisable in our sole discretion." Also the reported $350B chip financing, which has never been confirmed as signed.</td><td><span class="pill p-hi">High</span></td></tr>
+        <tr><td><span class="tick">SoftBank &middot; SFTBY</span></td><td>Parent of SB Energy, the Ohio landlord; Nvidia put $1.5B into SB Energy</td><td>Phases beyond 4.25 GW need Nvidia's credit support to finance. Without it, SB Energy has to find a lender on OpenAI's own credit.</td><td><span class="pill p-hi">High</span></td></tr>
+        <tr><td><span class="tick">CRWV &middot; NBIS &middot; IREN</span></td><td>Nvidia equity stakes (13F: 47.2M CRWV shares, $4.70B, Jun 30) and the $36B capacity-commitment model</td><td>The next round of capacity commitments and residual-value support. Today's $36B is signed; whatever comes next is a choice.</td><td><span class="pill p-md">Medium</span></td></tr>
+        <tr><td><span class="tick">APO &middot; BX &middot; KKR &middot; BAM &middot; GS &middot; BLK</span></td><td>Aug 10 MOUs</td><td>All of it, but these firms underwrite the capital themselves. They lose a fee pipeline, not principal, and it is small next to their size.</td><td><span class="pill p-md">Low&ndash;Med</span></td></tr>
+        <tr><td><span class="tick">INTC &middot; NOK &middot; SNPS &middot; COHR</span></td><td>Paid-in equity stakes (13F: Intel $30.0B, Coherent $3.1B, Nokia $2.2B, Synopsys $2.2B)</td><td>Little. The shares are owned. Joint product roadmaps are run by executives and could be re-prioritized, but slowly.</td><td><span class="pill p-lo">Low</span></td></tr>
+        <tr><td><span class="tick">TSMC &middot; memory makers</span></td><td>$279B supply commitments, up from $119B a quarter earlier</td><td>Near-term: nothing. The filing notes some supply agreements can be cancelled or rescheduled before firm orders, so watch this line over time.</td><td><span class="pill p-lo">Low</span></td></tr>
+      </tbody>
+    </table>
+    </div>
+  </div>
+</section>
+
+<section class="stack">
+  <h2>The market has priced Huang's risk into NVDA and nowhere else</h2>
+  <p class="prose">Close of Fri Nov 6 (the last session before the news) to close of Wed Nov 11. Nvidia fell. The companies that depend on Nvidia's discretionary support rose with the rest of AI. Some of that is their own news: CoreWeave reported earnings this week. Still, nothing in these prices discounts the unsigned pile.</p>
+  <div class="fig">
+    <div class="moves" id="moves" aria-label="Percent price change from Nov 6 to Nov 11, 2026"></div>
+    <p class="cap">Source: Yahoo Finance daily closes, Nov 6 and Nov 11, 2026. Bars run from &minus;35% to +35% around zero. SFTBY is SoftBank's US ADR.</p>
+  </div>
+</section>
+
+<section class="two">
+  <div class="card">
+    <h3>What to read in the Nov 17 10-Q</h3>
+    <ol class="watch">
+      <li><b>Note 10 guarantees table</b>, now $108.5B. A larger number means the unsigned pile is turning into signed obligations. The same number means it is on hold.</li>
+      <li><b>The MOU sentence</b>, "may not lead to definitive agreements." If it still reads that way three months later with no first project named, the $500B is still unsigned.</li>
+      <li><b>The 3.8 GW option.</b> Is it exercised, still open, or gone?</li>
+      <li><b>Equity investment commitments</b>, now $25B "subject to certain contingencies." These shrink if deals get repriced.</li>
+      <li><b>New governance language</b>: any board committee sign-off on investments or guarantees. A board can shrink the unsigned pile without firing anyone.</li>
+    </ol>
+  </div>
+  <div class="card">
+    <h3>The strongest case against this</h3>
+    <p>The board says it has confidence in Huang, so he may well stay. The MOUs were built so outside firms underwrite the capital, which keeps Nvidia's own role optional by design. The $500B Blackwell and Rubin backlog doesn't depend on any of this. And any successor would still want to sell GPUs.</p>
+    <p><b>Why the point survives:</b> none of that brings the unsigned pile to zero risk. It only lowers it. A CEO who stays "with less" authority, or a successor who must answer to a board that is investigating him, signs fewer open-ended guarantees. The August cut from $250B to $105B shows how far that pile can move in three weeks.</p>
+    <div class="quote">"We also hold an option, exercisable in our sole discretion, to provide additional credit support in phases for approximately 3.8 additional gigawatts as the site scales." &mdash; Nvidia 10-Q, Aug 26, 2026</div>
+  </div>
+</section>
+
+<hr>
+
+<section class="src">
+  <h3 style="color:var(--fg)">Sources</h3>
+  <ol>
+    <li><a href="https://www.sec.gov/Archives/edgar/data/1045810/000104581026000075/nvda-20260726.htm">Nvidia Form 10-Q for the quarter ended Jul 26, 2026</a>: Note 10 commitments and guarantees, MD&amp;A, risk factors, balance sheet.</li>
+    <li><a href="https://www.sec.gov/Archives/edgar/data/1045810/000104581026000069/sbeoainvidia-portsrelease.htm">Nvidia 8-K, Ex. 99.1, Aug 17, 2026</a>: PORTS-Pike guarantee, 3.75 GW option, $1.5B SB Energy investment.</li>
+    <li><a href="https://www.sec.gov/Archives/edgar/data/1045810/000104581026000065/information_table.xml">Nvidia 13F-HR, filed Aug 14, 2026</a>: public equity stakes as of Jun 30, 2026.</li>
+    <li><a href="https://www.axios.com/2026/11/08/nvidia-ceo-jensen-huang-admits-affair-board-to-launch-investigation">Axios, Nov 8, 2026</a> and <a href="https://www.cnn.com/2026/11/08/business/nvidia-investigation-ceo-jensen-huang">CNN, Nov 8, 2026</a>: admission and board investigation.</li>
+    <li><a href="https://finance.yahoo.com/technology/article/nvidia-reportedly-preparing-to-oust-ceo-huang-after-alleged-affairs-with-spy-nvidia-exec-231315876.html">Yahoo Finance, citing WSJ, Nov 11, 2026</a>: board weighing removal.</li>
+    <li><a href="https://fortune.com/2026/11/11/nvidia-board-directors-jensen-huang-captive-board/">Fortune, Nov 11, 2026</a>: the "stay, with less" scenario.</li>
+    <li><a href="https://thenextweb.com/news/nvidia-announced-750bn-of-ai-deals-its-own-credit-market-flinched">The Next Web, Jul 2026</a>: $250B and $350B talks, record CDS at 82 bp (ICE data via Bloomberg).</li>
+    <li><a href="https://www.unite.ai/nvidia-mobilizes-500-billion-in-third-party-capital-to-finance-ai-compute/">Unite.AI, Aug 2026</a>: the six MOU partners and the WSJ report of the guarantee cut.</li>
+    <li><a href="https://fortune.com/2025/12/02/nvidia-openai-deal-not-signed-yet-100-billion-rally-colette-kress/">Fortune, Dec 2, 2025</a>: CFO on the unsigned OpenAI agreement.</li>
+    <li><a href="https://investor.nvidia.com/news/press-release-details/2026/NVIDIA-Sets-Conference-Call-for-Third-Quarter-Financial-Results/">Nvidia IR, Oct 28, 2026</a>: Q3 results on Nov 17.</li>
+  </ol>
+</section>
+
+<footer>This page reads public filings and reporting. It is not investment advice, and it makes no claim about the investigation beyond what the company and the cited outlets have reported.</footer>
+</div>
+
+<script>
+(function(){
+  var groups=[
+    ["Nvidia and its rival",[["NVDA",-6.9],["AMD",23.1],["SMH",9.3]]],
+    ["Lean on the unsigned pile",[["SFTBY",8.9],["ORCL",10.6],["CRWV",31.0],["NBIS",19.5],["IREN",-3.7]]],
+    ["MOU capital providers",[["APO",5.3],["BX",2.1],["KKR",3.7],["BAM",-0.7],["GS",7.0],["BLK",4.0]]],
+    ["Paid-in equity stakes",[["INTC",11.1],["COHR",21.6],["NOK",10.2],["SNPS",2.6]]]
+  ];
+  var el=document.getElementById("moves"),R=35;
+  groups.forEach(function(g){
+    var h=document.createElement("div");h.className="grp";h.textContent=g[0];el.appendChild(h);
+    g[1].forEach(function(r){
+      var v=r[1],row=document.createElement("div");row.className="mv";
+      var w=Math.min(Math.abs(v),R)/R*50;
+      var left=v>=0?50:50-w;
+      row.innerHTML='<span class="t">'+r[0]+'</span><div class="track"><div class="bar" style="left:'+left+'%;width:'+w+'%;background:var('+(v>=0?'--up':'--down')+')"></div></div><span class="v">'+(v>0?'+':'')+v.toFixed(1)+'%</span>';
+      el.appendChild(row);
+    });
+  });
+})();
+</script>
+</body></html>
